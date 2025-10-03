@@ -1,29 +1,23 @@
 from flask import Flask, render_template, request
+import os # Import os module
 from google import genai
 from google.genai.types import Content
 
-# ****************
-# ***** YAHAN API KEY DALO *****
+# VERCEL DEPLOYMENT KE LIYE: API_KEY environment variable se load hogi
 API_KEY = os.environ.get('GEMINI_API_KEY') 
-# ****************
 
 app = Flask(__name__)
-# Secret key ki ab zaroorat nahi hai, kyunki hum session use nahi kar rahe
 
-# Global client object
-client = None
-try:
-    client = genai.Client(api_key=API_KEY)
-except Exception as e:
-    print(f"FATAL ERROR: Gemini API Client failed to initialize: {e}")
-    client = None
+# Global client object ko seedhe shuru karte hain
+client = genai.Client(api_key=API_KEY)
 
 
 @app.route("/", methods=["GET", "POST"])
 def home():
     
-    if client is None:
-        return "<h1>Configuration Error</h1><p>Gemini API key setup mein gadbad hai. Kripya app.py file check karein.</p>", 500
+    # Agar API Key load nahi hui, toh turant error dikhao
+    if not API_KEY:
+        return "<h1>Configuration Error</h1><p>GEMINI_API_KEY Vercel Environment Variable mein set nahi hai.</p>", 500
 
     user_query = ""
     assistant_response = ""
