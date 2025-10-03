@@ -4,7 +4,7 @@ from google.genai.types import Content
 
 # ****************
 # ***** YAHAN API KEY DALO *****
-API_KEY = 'AIzaSyANi7LygZz8Bsyt5FjDV3BmoQGbndhTHGE' 
+API_KEY = os.environ.get('GEMINI_API_KEY') 
 # ****************
 
 app = Flask(__name__)
